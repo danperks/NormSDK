@@ -5284,27 +5284,29 @@ class _UniffiFfiConverterTypeGender(_UniffiConverterRustBuffer):
 @dataclass
 class UserProfile:
     """
-    The wearer's body profile, used for calorie and distance estimates.
+    The wearer's body profile, which the watch's calorie model reads. The
+    firmware clamps age to 1–100, height to 90–240 cm and weight to
+    30.0–200.0 kg before using them.
 """
-    def __init__(self, *, height_cm:int, weight_kg:int, age:int, gender:Gender):
-        self.height_cm = height_cm
-        self.weight_kg = weight_kg
-        self.age = age
+    def __init__(self, *, gender:Gender, age:int, height_cm:int, weight_tenths_kg:int):
         self.gender = gender
+        self.age = age
+        self.height_cm = height_cm
+        self.weight_tenths_kg = weight_tenths_kg
         
         
 
     
     def __str__(self):
-        return "UserProfile(height_cm={}, weight_kg={}, age={}, gender={})".format(self.height_cm, self.weight_kg, self.age, self.gender)
+        return "UserProfile(gender={}, age={}, height_cm={}, weight_tenths_kg={})".format(self.gender, self.age, self.height_cm, self.weight_tenths_kg)
     def __eq__(self, other):
-        if self.height_cm != other.height_cm:
-            return False
-        if self.weight_kg != other.weight_kg:
+        if self.gender != other.gender:
             return False
         if self.age != other.age:
             return False
-        if self.gender != other.gender:
+        if self.height_cm != other.height_cm:
+            return False
+        if self.weight_tenths_kg != other.weight_tenths_kg:
             return False
         return True
 
@@ -5312,25 +5314,25 @@ class _UniffiFfiConverterTypeUserProfile(_UniffiConverterRustBuffer):
     @staticmethod
     def read(buf):
         return UserProfile(
-            height_cm=_UniffiFfiConverterUInt8.read(buf),
-            weight_kg=_UniffiFfiConverterUInt16.read(buf),
-            age=_UniffiFfiConverterUInt8.read(buf),
             gender=_UniffiFfiConverterTypeGender.read(buf),
+            age=_UniffiFfiConverterUInt8.read(buf),
+            height_cm=_UniffiFfiConverterUInt8.read(buf),
+            weight_tenths_kg=_UniffiFfiConverterUInt16.read(buf),
         )
 
     @staticmethod
     def check_lower(value):
-        _UniffiFfiConverterUInt8.check_lower(value.height_cm)
-        _UniffiFfiConverterUInt16.check_lower(value.weight_kg)
-        _UniffiFfiConverterUInt8.check_lower(value.age)
         _UniffiFfiConverterTypeGender.check_lower(value.gender)
+        _UniffiFfiConverterUInt8.check_lower(value.age)
+        _UniffiFfiConverterUInt8.check_lower(value.height_cm)
+        _UniffiFfiConverterUInt16.check_lower(value.weight_tenths_kg)
 
     @staticmethod
     def write(value, buf):
-        _UniffiFfiConverterUInt8.write(value.height_cm, buf)
-        _UniffiFfiConverterUInt16.write(value.weight_kg, buf)
-        _UniffiFfiConverterUInt8.write(value.age, buf)
         _UniffiFfiConverterTypeGender.write(value.gender, buf)
+        _UniffiFfiConverterUInt8.write(value.age, buf)
+        _UniffiFfiConverterUInt8.write(value.height_cm, buf)
+        _UniffiFfiConverterUInt16.write(value.weight_tenths_kg, buf)
 
 @dataclass
 class VibrationSettings:

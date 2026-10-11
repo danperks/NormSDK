@@ -215,6 +215,15 @@ class RoundTrips(unittest.TestCase):
                                         channel=n.WriteChannel.PRIMARY, response_command=0x04, timeout_ms=2000))
         self.assertEqual(bytes(reply.packet.payload[:6]), bytes([0xEB, 0x07, 2, 3, 4, 5]))
 
+    def test_user_profile_reaches_the_firmware_record(self):
+        # Female so the record reads back: the firmware strcpy's it, and a
+        # male profile's leading zero byte reads back as empty.
+        profile = n.UserProfile(gender=n.Gender.FEMALE, age=41, height_cm=182, weight_tenths_kg=812)
+        self.write(n.Request.SET_USER_PROFILE(profile=profile))
+        reply = self.call(n.Request.RAW(label='profile-read', frame=n.encode_frame_6f(0x30, n.Action.CHECK(), b'\x00'),
+                                        channel=n.WriteChannel.PRIMARY, response_command=0x30, timeout_ms=2000))
+        self.assertEqual(bytes(reply.packet.payload), bytes([1, 41, 182]) + (812).to_bytes(2, 'little'))
+
     def test_watch_id(self):
         self.assertEqual(self.call(n.Request.GET_WATCH_ID()).id, 'FCP03A18050801000000')
 

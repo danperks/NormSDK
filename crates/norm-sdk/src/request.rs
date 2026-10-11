@@ -455,12 +455,12 @@ impl Request {
             }
             SetUserProfile { profile } => {
                 let mut p = vec![profile.gender.byte(), profile.age, profile.height_cm];
-                put_u16(&mut p, profile.weight_kg);
-                set(0x05, &p)
+                put_u16(&mut p, profile.weight_tenths_kg);
+                set(0x30, &p)
             }
             SetUserProfile6e { profile } => {
-                let weight = (u32::from(profile.weight_kg) * 100) as u16;
-                let mut p = vec![profile.gender.byte()];
+                let weight = (u32::from(profile.weight_tenths_kg) * 10) as u16;
+                let mut p = vec![profile.gender.byte_6e()];
                 put_u16(&mut p, u16::from(profile.age));
                 p.extend([0x01, 0x01, profile.height_cm]);
                 put_u16(&mut p, weight);
@@ -1108,14 +1108,29 @@ mod tests {
         assert_eq!(
             one(Request::SetUserProfile6e {
                 profile: UserProfile {
-                    height_cm: 175,
-                    weight_kg: 70,
+                    gender: Gender::Male,
                     age: 30,
-                    gender: Gender::Male
+                    height_cm: 175,
+                    weight_tenths_kg: 700,
                 }
             }),
             [0x6E, 0x01, 0x0C, 1, 30, 0, 1, 1, 175, 0x58, 0x1B, 0x8F]
         );
+        let profile = UserProfile {
+            gender: Gender::Male,
+            age: 20,
+            height_cm: 170,
+            weight_tenths_kg: 600,
+        };
+        assert_eq!(
+            one(Request::SetUserProfile { profile }),
+            [0x6F, 0x30, 0x71, 0x05, 0x00, 0, 20, 170, 0x58, 0x02, 0x8F]
+        );
+        let female = UserProfile {
+            gender: Gender::Female,
+            ..profile
+        };
+        assert_eq!(one(Request::SetUserProfile { profile: female })[5], 1);
         assert_eq!(
             one(Request::FindPhoneStartAck),
             [0x6F, 0x01, 0x81, 0x02, 0x00, 0xD2, 0x00, 0x8F]

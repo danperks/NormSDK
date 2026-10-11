@@ -514,13 +514,16 @@ impl CommandKind {
                 .summary("Android `protocol6E.DateTime`.")
                 .request("`year_le16 month day hour minute second`")
                 .evidence(Android6e),
-            K::SetUserProfile => set(self, "profile.set", "Set body profile", Time, 0x05)
-                .summary("Sets gender, age, height and weight for calorie and distance estimates.")
-                .request("`gender age height_cm weight_kg_le16` (gender 0 = female, 1 = male).")
-                .evidence(AndroidLegacy6f),
+            K::SetUserProfile => set(self, "profile.set", "Set body profile", Time, 0x30)
+                .summary("Writes the body profile the watch's calorie model reads (Mifflin-St Jeor resting energy, Harris-Benedict-scaled activity).")
+                .request("`sex age height_cm weight_0.1kg_le16` (sex 0 = male, 1 = female). The factory record is male, 20, 170 cm, 60.0 kg.")
+                .evidence(Rewrite)
+                .notes("The firmware copies the five bytes verbatim into its profile record and reconfigures the activity model. \
+                        A check (`70 [00]`) reads the record back with `strcpy`, so a male profile (leading zero) reads back empty; \
+                        the SDK has no get for that reason. The `0x05` user-info write the earlier apps sent is acked but leaves the profile unchanged."),
             K::SetUserProfile6e => e6(self, "profile.set_6e", "Set body profile (6E)", Time, 0x0C)
                 .summary("Android `protocol6E.SetUserInfo`.")
-                .request("`gender age_le16 01 01 height_cm weight_x100_le16`")
+                .request("`sex age_le16 01 01 height_cm weight_x100_le16` (sex 0 = female, 1 = male, as Android sends it).")
                 .evidence(Android6e),
             K::SetLanguage => set(self, "settings.language", "Set language", Settings, 0x09)
                 .summary("Sets the UI language during binding.")
@@ -952,10 +955,10 @@ impl CommandKind {
             utc_offset_minutes: 60,
         };
         let profile = UserProfile {
-            height_cm: 175,
-            weight_kg: 70,
-            age: 30,
-            gender: Gender::Male,
+            gender: Gender::Female,
+            age: 41,
+            height_cm: 182,
+            weight_tenths_kg: 812,
         };
         let reminder = Reminder {
             index: 0,

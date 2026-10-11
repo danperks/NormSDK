@@ -3752,21 +3752,29 @@ public func FfiConverterTypeUnitsAndFormat_lower(_ value: UnitsAndFormat) -> Rus
 
 
 /**
- * The wearer's body profile, used for calorie and distance estimates.
+ * The wearer's body profile, which the watch's calorie model reads. The
+ * firmware clamps age to 1–100, height to 90–240 cm and weight to
+ * 30.0–200.0 kg before using them.
  */
 public struct UserProfile: Equatable, Hashable {
-    public var heightCm: UInt8
-    public var weightKg: UInt16
-    public var age: UInt8
     public var gender: Gender
+    public var age: UInt8
+    public var heightCm: UInt8
+    /**
+     * Weight in tenths of a kilogram (705 = 70.5 kg).
+     */
+    public var weightTenthsKg: UInt16
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(heightCm: UInt8, weightKg: UInt16, age: UInt8, gender: Gender) {
-        self.heightCm = heightCm
-        self.weightKg = weightKg
-        self.age = age
+    public init(gender: Gender, age: UInt8, heightCm: UInt8, 
+        /**
+         * Weight in tenths of a kilogram (705 = 70.5 kg).
+         */weightTenthsKg: UInt16) {
         self.gender = gender
+        self.age = age
+        self.heightCm = heightCm
+        self.weightTenthsKg = weightTenthsKg
     }
 
     
@@ -3785,18 +3793,18 @@ public struct FfiConverterTypeUserProfile: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UserProfile {
         return
             try UserProfile(
-                heightCm: FfiConverterUInt8.read(from: &buf), 
-                weightKg: FfiConverterUInt16.read(from: &buf), 
+                gender: FfiConverterTypeGender.read(from: &buf), 
                 age: FfiConverterUInt8.read(from: &buf), 
-                gender: FfiConverterTypeGender.read(from: &buf)
+                heightCm: FfiConverterUInt8.read(from: &buf), 
+                weightTenthsKg: FfiConverterUInt16.read(from: &buf)
         )
     }
 
     public static func write(_ value: UserProfile, into buf: inout [UInt8]) {
-        FfiConverterUInt8.write(value.heightCm, into: &buf)
-        FfiConverterUInt16.write(value.weightKg, into: &buf)
-        FfiConverterUInt8.write(value.age, into: &buf)
         FfiConverterTypeGender.write(value.gender, into: &buf)
+        FfiConverterUInt8.write(value.age, into: &buf)
+        FfiConverterUInt8.write(value.heightCm, into: &buf)
+        FfiConverterUInt16.write(value.weightTenthsKg, into: &buf)
     }
 }
 

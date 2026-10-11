@@ -18,7 +18,7 @@ Emulator column: `Apollo3_P03B_NORM2_F0.2B01 (stock), NormCrack fwemu`.
 | [`battery.get_6e`](#batteryget_6e) | 6E | `0x0F` | — | `0x00` | ignored (6E) | no reply |
 | [`time.set`](#timeset) | 6F | `0x04` | set `71` | `0x04` | handled | ack status 0 |
 | [`time.set_6e`](#timeset_6e) | 6E | `0x15` | — | — | ignored (6E) | sent, no reply |
-| [`profile.set`](#profileset) | 6F | `0x05` | set `71` | `0x05` | handled | ack status 0 |
+| [`profile.set`](#profileset) | 6F | `0x30` | set `71` | `0x30` | handled | ack status 0 |
 | [`profile.set_6e`](#profileset_6e) | 6E | `0x0C` | — | — | ignored (6E) | sent, no reply |
 | [`settings.language`](#settingslanguage) | 6F | `0x09` | set `71` | `0x09` | no handler (ack status 2) | ack status 2 |
 | [`settings.brightness.set`](#settingsbrightnessset) | 6F | `0x07` | set `71` | `0x07` | handled | ack status 0 |
@@ -266,18 +266,20 @@ Hardware-probed: Norm Two accepts the Android 12-byte payload. A check (`70 [00]
 
 ### `profile.set`
 
-**Set body profile**. Sets gender, age, height and weight for calorie and distance estimates.
+**Set body profile**. Writes the body profile the watch's calorie model reads (Mifflin-St Jeor resting energy, Harris-Benedict-scaled activity).
 
 | | |
 |---|---|
-| Frame | 6F `0x05` set `71`, written to `8001` |
-| Request | `gender age height_cm weight_kg_le16` (gender 0 = female, 1 = male). |
+| Frame | 6F `0x30` set `71`, written to `8001` |
+| Request | `sex age height_cm weight_0.1kg_le16` (sex 0 = male, 1 = female). The factory record is male, 20, 170 cm, 60.0 kg. |
 | Response | `01 81 [code, status]` ack; status 0 = applied. |
-| Completes on | `0x05`; timeout 5000 ms |
-| Evidence | Android 6F stack |
+| Completes on | `0x30`; timeout 5000 ms |
+| Evidence | NormConnect rewrite |
 | Stock firmware | handled |
-| Example | `6F 05 71 05 00 01 1E AF 46 00 8F` |
-| Emulator | `6F 01 81 02 00 05 00 8F`<br>→ `Ack { command: 5, status: 0 }` |
+| Example | `6F 30 71 05 00 01 29 B6 2C 03 8F` |
+| Emulator | `6F 01 81 02 00 30 00 8F`<br>→ `Ack { command: 48, status: 0 }` |
+
+The firmware copies the five bytes verbatim into its profile record and reconfigures the activity model. A check (`70 [00]`) reads the record back with `strcpy`, so a male profile (leading zero) reads back empty; the SDK has no get for that reason. The `0x05` user-info write the earlier apps sent is acked but leaves the profile unchanged.
 
 ### `profile.set_6e`
 
@@ -286,11 +288,11 @@ Hardware-probed: Norm Two accepts the Android 12-byte payload. A check (`70 [00]
 | | |
 |---|---|
 | Frame | 6E `0x0C` —, written to `8001` |
-| Request | `gender age_le16 01 01 height_cm weight_x100_le16` |
+| Request | `sex age_le16 01 01 height_cm weight_x100_le16` (sex 0 = female, 1 = male, as Android sends it). |
 | Response | None expected. |
 | Evidence | Android 6E stack |
 | Stock firmware | ignored (6E) |
-| Example | `6E 01 0C 01 1E 00 01 01 AF 58 1B 8F` |
+| Example | `6E 01 0C 00 29 00 01 01 B6 B8 1F 8F` |
 | Emulator | no reply |
 
 

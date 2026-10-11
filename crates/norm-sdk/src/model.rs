@@ -35,7 +35,16 @@ pub enum Gender {
 }
 
 impl Gender {
+    /// The Norm Two profile record (6F `0x30`): 0 = male, 1 = female.
     pub(crate) fn byte(self) -> u8 {
+        match self {
+            Gender::Male => 0,
+            Gender::Female => 1,
+        }
+    }
+
+    /// Android `protocol6E.SetUserInfo`: 0 = female, 1 = male.
+    pub(crate) fn byte_6e(self) -> u8 {
         match self {
             Gender::Female => 0,
             Gender::Male => 1,
@@ -43,13 +52,16 @@ impl Gender {
     }
 }
 
-/// The wearer's body profile, used for calorie and distance estimates.
+/// The wearer's body profile, which the watch's calorie model reads. The
+/// firmware clamps age to 1–100, height to 90–240 cm and weight to
+/// 30.0–200.0 kg before using them.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, uniffi::Record)]
 pub struct UserProfile {
-    pub height_cm: u8,
-    pub weight_kg: u16,
-    pub age: u8,
     pub gender: Gender,
+    pub age: u8,
+    pub height_cm: u8,
+    /// Weight in tenths of a kilogram (705 = 70.5 kg).
+    pub weight_tenths_kg: u16,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, uniffi::Enum)]

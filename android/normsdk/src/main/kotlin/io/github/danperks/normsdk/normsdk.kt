@@ -4544,16 +4544,21 @@ public object FfiConverterTypeUnitsAndFormat: FfiConverterRustBuffer<UnitsAndFor
 
 
 /**
- * The wearer's body profile, used for calorie and distance estimates.
+ * The wearer's body profile, which the watch's calorie model reads. The
+ * firmware clamps age to 1–100, height to 90–240 cm and weight to
+ * 30.0–200.0 kg before using them.
  */
 data class UserProfile (
-    var `heightCm`: kotlin.UByte
-    , 
-    var `weightKg`: kotlin.UShort
+    var `gender`: Gender
     , 
     var `age`: kotlin.UByte
     , 
-    var `gender`: Gender
+    var `heightCm`: kotlin.UByte
+    , 
+    /**
+     * Weight in tenths of a kilogram (705 = 70.5 kg).
+     */
+    var `weightTenthsKg`: kotlin.UShort
     
 ){
     
@@ -4570,25 +4575,25 @@ data class UserProfile (
 public object FfiConverterTypeUserProfile: FfiConverterRustBuffer<UserProfile> {
     override fun read(buf: ByteBuffer): UserProfile {
         return UserProfile(
+            FfiConverterTypeGender.read(buf),
+            FfiConverterUByte.read(buf),
             FfiConverterUByte.read(buf),
             FfiConverterUShort.read(buf),
-            FfiConverterUByte.read(buf),
-            FfiConverterTypeGender.read(buf),
         )
     }
 
     override fun allocationSize(value: UserProfile) = (
-            FfiConverterUByte.allocationSize(value.`heightCm`) +
-            FfiConverterUShort.allocationSize(value.`weightKg`) +
+            FfiConverterTypeGender.allocationSize(value.`gender`) +
             FfiConverterUByte.allocationSize(value.`age`) +
-            FfiConverterTypeGender.allocationSize(value.`gender`)
+            FfiConverterUByte.allocationSize(value.`heightCm`) +
+            FfiConverterUShort.allocationSize(value.`weightTenthsKg`)
     )
 
     override fun write(value: UserProfile, buf: ByteBuffer) {
-            FfiConverterUByte.write(value.`heightCm`, buf)
-            FfiConverterUShort.write(value.`weightKg`, buf)
-            FfiConverterUByte.write(value.`age`, buf)
             FfiConverterTypeGender.write(value.`gender`, buf)
+            FfiConverterUByte.write(value.`age`, buf)
+            FfiConverterUByte.write(value.`heightCm`, buf)
+            FfiConverterUShort.write(value.`weightTenthsKg`, buf)
     }
 }
 

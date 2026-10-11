@@ -440,11 +440,11 @@
    "expected": "ack:0",
    "outcome": "ack:0",
    "received": [
-    "6F 01 81 02 00 05 00 8F"
+    "6F 01 81 02 00 30 00 8F"
    ],
-   "response": "Ack { command: 5, status: 0 }",
+   "response": "Ack { command: 48, status: 0 }",
    "sent": [
-    "6F 05 71 05 00 01 1E AF 46 00 8F"
+    "6F 30 71 05 00 01 29 B6 2C 03 8F"
    ]
   },
   "profile.set_6e": {
@@ -453,7 +453,7 @@
    "received": [],
    "response": null,
    "sent": [
-    "6E 01 0C 01 1E 00 01 01 AF 58 1B 8F"
+    "6E 01 0C 00 29 00 01 01 B6 B8 1F 8F"
    ]
   },
   "raw": {
