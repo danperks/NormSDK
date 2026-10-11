@@ -79,7 +79,7 @@ swift test                                            # Swift bindings
 python3 python/tests/test_bindings.py                 # Python bindings
 ```
 
-The firmware suite runs every catalog command, plus read-after-write round trips, against the stock Norm Two firmware running in [NormCrack](https://github.com/danperks/NormCrack)'s Cortex-M4 emulator:
+The firmware suite runs every catalog command, plus read-after-write round trips, against the stock Norm Two firmware running in NormCrack's Cortex-M4 emulator:
 
 ```sh
 NORMCRACK_DIR=../NormCrack python3 tests/emulator/test_stock_firmware.py --record
