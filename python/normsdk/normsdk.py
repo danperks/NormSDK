@@ -8386,6 +8386,31 @@ class _UniffiFfiConverterTypeResponse(_UniffiConverterRustBuffer):
 
 
 
+class _UniffiFfiConverterOptionalTypeResponse(_UniffiConverterRustBuffer):
+    @classmethod
+    def check_lower(cls, value):
+        if value is not None:
+            _UniffiFfiConverterTypeResponse.check_lower(value)
+
+    @classmethod
+    def write(cls, value, buf):
+        if value is None:
+            buf.write_u8(0)
+            return
+
+        buf.write_u8(1)
+        _UniffiFfiConverterTypeResponse.write(value, buf)
+
+    @classmethod
+    def read(cls, buf):
+        flag = buf.read_u8()
+        if flag == 0:
+            return None
+        elif flag == 1:
+            return _UniffiFfiConverterTypeResponse.read(buf)
+        else:
+            raise InternalError("Unexpected flag byte for optional type")
+
 
 
 
@@ -8424,14 +8449,18 @@ class MatchOutcome:
     @dataclass
     class PROGRESS:
         """
-        One more record of a multi-frame reply.
+        One more record of a multi-frame reply. `latest` holds just that
+        record, in the same response shape the completion will use.
 """
         
-        def __init__(self, received:int, total:int):
+        def __init__(self, received:int, total:int, latest:typing.Optional[Response]):
             self.received = received
             
             
             self.total = total
+            
+            
+            self.latest = latest
             
             
             pass
@@ -8441,7 +8470,7 @@ class MatchOutcome:
             
     
         def __str__(self):
-            return "MatchOutcome.PROGRESS(received={}, total={})".format(self.received, self.total)
+            return "MatchOutcome.PROGRESS(received={}, total={}, latest={})".format(self.received, self.total, self.latest)
         def __eq__(self, other):
             if not isinstance(other, MatchOutcome):
                 return NotImplemented
@@ -8450,6 +8479,8 @@ class MatchOutcome:
             if self.received != other.received:
                 return False
             if self.total != other.total:
+                return False
+            if self.latest != other.latest:
                 return False
             return True
 
@@ -8516,6 +8547,7 @@ class _UniffiFfiConverterTypeMatchOutcome(_UniffiConverterRustBuffer):
             return MatchOutcome.PROGRESS(
                 _UniffiFfiConverterUInt32.read(buf),
                 _UniffiFfiConverterUInt32.read(buf),
+                _UniffiFfiConverterOptionalTypeResponse.read(buf),
             )
         if variant == 3:
             return MatchOutcome.COMPLETE(
@@ -8530,6 +8562,7 @@ class _UniffiFfiConverterTypeMatchOutcome(_UniffiConverterRustBuffer):
         if value.is_PROGRESS():
             _UniffiFfiConverterUInt32.check_lower(value.received)
             _UniffiFfiConverterUInt32.check_lower(value.total)
+            _UniffiFfiConverterOptionalTypeResponse.check_lower(value.latest)
             return
         if value.is_COMPLETE():
             _UniffiFfiConverterTypeResponse.check_lower(value.response)
@@ -8544,6 +8577,7 @@ class _UniffiFfiConverterTypeMatchOutcome(_UniffiConverterRustBuffer):
             buf.write_i32(2)
             _UniffiFfiConverterUInt32.write(value.received, buf)
             _UniffiFfiConverterUInt32.write(value.total, buf)
+            _UniffiFfiConverterOptionalTypeResponse.write(value.latest, buf)
         if value.is_COMPLETE():
             buf.write_i32(3)
             _UniffiFfiConverterTypeResponse.write(value.response, buf)
@@ -13430,31 +13464,6 @@ class _UniffiFfiConverterOptionalUInt64(_UniffiConverterRustBuffer):
         else:
             raise InternalError("Unexpected flag byte for optional type")
 
-class _UniffiFfiConverterOptionalTypeResponse(_UniffiConverterRustBuffer):
-    @classmethod
-    def check_lower(cls, value):
-        if value is not None:
-            _UniffiFfiConverterTypeResponse.check_lower(value)
-
-    @classmethod
-    def write(cls, value, buf):
-        if value is None:
-            buf.write_u8(0)
-            return
-
-        buf.write_u8(1)
-        _UniffiFfiConverterTypeResponse.write(value, buf)
-
-    @classmethod
-    def read(cls, buf):
-        flag = buf.read_u8()
-        if flag == 0:
-            return None
-        elif flag == 1:
-            return _UniffiFfiConverterTypeResponse.read(buf)
-        else:
-            raise InternalError("Unexpected flag byte for optional type")
-
 
 
 
@@ -13504,8 +13513,11 @@ class SessionEvent:
 
     @dataclass
     class PROGRESS:
+        """
+        One more record of a sync; `latest` is just that record.
+"""
         
-        def __init__(self, request_id:int, received:int, total:int):
+        def __init__(self, request_id:int, received:int, total:int, latest:typing.Optional[Response]):
             self.request_id = request_id
             
             
@@ -13515,6 +13527,9 @@ class SessionEvent:
             self.total = total
             
             
+            self.latest = latest
+            
+            
             pass
 
     
@@ -13522,7 +13537,7 @@ class SessionEvent:
             
     
         def __str__(self):
-            return "SessionEvent.PROGRESS(request_id={}, received={}, total={})".format(self.request_id, self.received, self.total)
+            return "SessionEvent.PROGRESS(request_id={}, received={}, total={}, latest={})".format(self.request_id, self.received, self.total, self.latest)
         def __eq__(self, other):
             if not isinstance(other, SessionEvent):
                 return NotImplemented
@@ -13533,6 +13548,8 @@ class SessionEvent:
             if self.received != other.received:
                 return False
             if self.total != other.total:
+                return False
+            if self.latest != other.latest:
                 return False
             return True
 
@@ -13675,6 +13692,7 @@ class _UniffiFfiConverterTypeSessionEvent(_UniffiConverterRustBuffer):
                 _UniffiFfiConverterUInt64.read(buf),
                 _UniffiFfiConverterUInt32.read(buf),
                 _UniffiFfiConverterUInt32.read(buf),
+                _UniffiFfiConverterOptionalTypeResponse.read(buf),
             )
         if variant == 3:
             return SessionEvent.COMPLETED(
@@ -13703,6 +13721,7 @@ class _UniffiFfiConverterTypeSessionEvent(_UniffiConverterRustBuffer):
             _UniffiFfiConverterUInt64.check_lower(value.request_id)
             _UniffiFfiConverterUInt32.check_lower(value.received)
             _UniffiFfiConverterUInt32.check_lower(value.total)
+            _UniffiFfiConverterOptionalTypeResponse.check_lower(value.latest)
             return
         if value.is_COMPLETED():
             _UniffiFfiConverterUInt64.check_lower(value.request_id)
@@ -13729,6 +13748,7 @@ class _UniffiFfiConverterTypeSessionEvent(_UniffiConverterRustBuffer):
             _UniffiFfiConverterUInt64.write(value.request_id, buf)
             _UniffiFfiConverterUInt32.write(value.received, buf)
             _UniffiFfiConverterUInt32.write(value.total, buf)
+            _UniffiFfiConverterOptionalTypeResponse.write(value.latest, buf)
         if value.is_COMPLETED():
             buf.write_i32(3)
             _UniffiFfiConverterUInt64.write(value.request_id, buf)

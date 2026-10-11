@@ -6114,11 +6114,13 @@ sealed class MatchOutcome {
     
     
     /**
-     * One more record of a multi-frame reply.
+     * One more record of a multi-frame reply. `latest` holds just that
+     * record, in the same response shape the completion will use.
      */
     data class Progress(
         val `received`: kotlin.UInt, 
-        val `total`: kotlin.UInt) : MatchOutcome()
+        val `total`: kotlin.UInt, 
+        val `latest`: io.github.danperks.normsdk.Response?) : MatchOutcome()
         
     {
         
@@ -6155,6 +6157,7 @@ public object FfiConverterTypeMatchOutcome : FfiConverterRustBuffer<MatchOutcome
             2 -> MatchOutcome.Progress(
                 FfiConverterUInt.read(buf),
                 FfiConverterUInt.read(buf),
+                FfiConverterOptionalTypeResponse.read(buf),
                 )
             3 -> MatchOutcome.Complete(
                 FfiConverterTypeResponse.read(buf),
@@ -6176,6 +6179,7 @@ public object FfiConverterTypeMatchOutcome : FfiConverterRustBuffer<MatchOutcome
                 4UL
                 + FfiConverterUInt.allocationSize(value.`received`)
                 + FfiConverterUInt.allocationSize(value.`total`)
+                + FfiConverterOptionalTypeResponse.allocationSize(value.`latest`)
             )
         }
         is MatchOutcome.Complete -> {
@@ -6197,6 +6201,7 @@ public object FfiConverterTypeMatchOutcome : FfiConverterRustBuffer<MatchOutcome
                 buf.putInt(2)
                 FfiConverterUInt.write(value.`received`, buf)
                 FfiConverterUInt.write(value.`total`, buf)
+                FfiConverterOptionalTypeResponse.write(value.`latest`, buf)
                 Unit
             }
             is MatchOutcome.Complete -> {
@@ -9667,10 +9672,14 @@ sealed class SessionEvent {
         companion object
     }
     
+    /**
+     * One more record of a sync; `latest` is just that record.
+     */
     data class Progress(
         val `requestId`: kotlin.ULong, 
         val `received`: kotlin.UInt, 
-        val `total`: kotlin.UInt) : SessionEvent()
+        val `total`: kotlin.UInt, 
+        val `latest`: io.github.danperks.normsdk.Response?) : SessionEvent()
         
     {
         
@@ -9736,6 +9745,7 @@ public object FfiConverterTypeSessionEvent : FfiConverterRustBuffer<SessionEvent
                 FfiConverterULong.read(buf),
                 FfiConverterUInt.read(buf),
                 FfiConverterUInt.read(buf),
+                FfiConverterOptionalTypeResponse.read(buf),
                 )
             3 -> SessionEvent.Completed(
                 FfiConverterULong.read(buf),
@@ -9769,6 +9779,7 @@ public object FfiConverterTypeSessionEvent : FfiConverterRustBuffer<SessionEvent
                 + FfiConverterULong.allocationSize(value.`requestId`)
                 + FfiConverterUInt.allocationSize(value.`received`)
                 + FfiConverterUInt.allocationSize(value.`total`)
+                + FfiConverterOptionalTypeResponse.allocationSize(value.`latest`)
             )
         }
         is SessionEvent.Completed -> {
@@ -9810,6 +9821,7 @@ public object FfiConverterTypeSessionEvent : FfiConverterRustBuffer<SessionEvent
                 FfiConverterULong.write(value.`requestId`, buf)
                 FfiConverterUInt.write(value.`received`, buf)
                 FfiConverterUInt.write(value.`total`, buf)
+                FfiConverterOptionalTypeResponse.write(value.`latest`, buf)
                 Unit
             }
             is SessionEvent.Completed -> {

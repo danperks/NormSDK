@@ -166,10 +166,12 @@ pub enum Response {
 pub enum MatchOutcome {
     /// Not for this request.
     Ignored,
-    /// One more record of a multi-frame reply.
+    /// One more record of a multi-frame reply. `latest` holds just that
+    /// record, in the same response shape the completion will use.
     Progress {
         received: u32,
         total: u32,
+        latest: Option<Response>,
     },
     Complete {
         response: Response,
@@ -313,7 +315,7 @@ impl Matcher {
         index >= 1 && u32::from(index) <= self.total() && self.seen.insert(index)
     }
 
-    fn progress_or_done(&self, received: usize) -> MatchOutcome {
+    fn progress_or_done(&self, received: usize, latest: Response) -> MatchOutcome {
         let total = self.total();
         if received as u32 >= total {
             MatchOutcome::Complete {
@@ -323,6 +325,7 @@ impl Matcher {
             MatchOutcome::Progress {
                 received: received as u32,
                 total,
+                latest: Some(latest),
             }
         }
     }
@@ -359,7 +362,12 @@ impl Matcher {
                 };
                 records.push(record);
                 let n = records.len();
-                self.progress_or_done(n)
+                self.progress_or_done(
+                    n,
+                    Response::SportRecords {
+                        records: vec![record],
+                    },
+                )
             }
             CommandKind::GetSleepRecords => {
                 if d.len() < 7 {
@@ -381,7 +389,12 @@ impl Matcher {
                 };
                 points.push(point);
                 let n = points.len();
-                self.progress_or_done(n)
+                self.progress_or_done(
+                    n,
+                    Response::SleepPoints {
+                        points: vec![point],
+                    },
+                )
             }
             CommandKind::GetHeartRateRecords => {
                 if d.len() < 7 {
@@ -401,7 +414,12 @@ impl Matcher {
                 };
                 samples.push(sample);
                 let n = samples.len();
-                self.progress_or_done(n)
+                self.progress_or_done(
+                    n,
+                    Response::HeartRateSamples {
+                        samples: vec![sample],
+                    },
+                )
             }
             CommandKind::GetWorkouts => {
                 if d.is_empty() {
@@ -422,7 +440,12 @@ impl Matcher {
                 };
                 records.push(record);
                 let n = records.len();
-                self.progress_or_done(n)
+                self.progress_or_done(
+                    n,
+                    Response::Workouts {
+                        records: vec![record],
+                    },
+                )
             }
             CommandKind::GetWorkoutHeartRate => {
                 if packet.action != Action::CheckResponse {
@@ -449,6 +472,7 @@ impl Matcher {
                     MatchOutcome::Progress {
                         received: n as u32,
                         total: self.total(),
+                        latest: None,
                     }
                 }
             }
@@ -465,10 +489,13 @@ impl Matcher {
                     MatchOutcome::Complete {
                         response: self.partial().unwrap(),
                     }
-                } else if alarm.is_some() {
+                } else if let Some(alarm) = alarm {
                     MatchOutcome::Progress {
                         received: n as u32,
                         total: self.total(),
+                        latest: Some(Response::Alarms {
+                            alarms: vec![alarm],
+                        }),
                     }
                 } else {
                     MatchOutcome::Ignored
@@ -1358,7 +1385,14 @@ mod tests {
             m.offer(&sample(1, 60), NOW),
             MatchOutcome::Progress {
                 received: 1,
-                total: 2
+                total: 2,
+                latest: Some(Response::HeartRateSamples {
+                    samples: vec![HeartRateSample {
+                        index: 1,
+                        timestamp: 0x6ACB1F40,
+                        bpm: 60
+                    }]
+                })
             }
         );
         assert_eq!(m.offer(&sample(1, 61), NOW), MatchOutcome::Ignored);

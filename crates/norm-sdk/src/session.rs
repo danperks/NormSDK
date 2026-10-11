@@ -52,10 +52,12 @@ pub enum SessionEvent {
         message: WatchMessage,
         consumed_by: Option<u64>,
     },
+    /// One more record of a sync; `latest` is just that record.
     Progress {
         request_id: u64,
         received: u32,
         total: u32,
+        latest: Option<Response>,
     },
     Completed {
         request_id: u64,
@@ -213,12 +215,20 @@ impl Session {
                 _ => None,
             };
             let (consumed_by, follow) = match outcome {
-                Some((id, MatchOutcome::Progress { received, total })) => (
+                Some((
+                    id,
+                    MatchOutcome::Progress {
+                        received,
+                        total,
+                        latest,
+                    },
+                )) => (
                     Some(id),
                     Some(SessionEvent::Progress {
                         request_id: id,
                         received,
                         total,
+                        latest,
                     }),
                 ),
                 Some((id, MatchOutcome::Complete { response })) => {

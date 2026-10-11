@@ -104,7 +104,7 @@ final class ConsoleModel: ObservableObject {
             return LogLine(kind: .result, text: "#\(id) \(describeResponse(response: response))", detail: nil)
         case .timedOut(let id, let partial):
             return LogLine(kind: .result, text: "#\(id) timed out", detail: partial.map { describeResponse(response: $0) })
-        case .progress(let id, let received, let total):
+        case .progress(let id, let received, let total, _):
             return LogLine(kind: .info, text: "#\(id) \(received)/\(total)", detail: nil)
         case .cancelled:
             return nil

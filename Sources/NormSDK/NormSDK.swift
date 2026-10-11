@@ -6517,9 +6517,10 @@ public enum MatchOutcome: Equatable, Hashable {
      */
     case ignored
     /**
-     * One more record of a multi-frame reply.
+     * One more record of a multi-frame reply. `latest` holds just that
+     * record, in the same response shape the completion will use.
      */
-    case progress(received: UInt32, total: UInt32
+    case progress(received: UInt32, total: UInt32, latest: Response?
     )
     case complete(response: Response
     )
@@ -6546,7 +6547,7 @@ public struct FfiConverterTypeMatchOutcome: FfiConverterRustBuffer {
         
         case 1: return .ignored
         
-        case 2: return .progress(received: try FfiConverterUInt32.read(from: &buf), total: try FfiConverterUInt32.read(from: &buf)
+        case 2: return .progress(received: try FfiConverterUInt32.read(from: &buf), total: try FfiConverterUInt32.read(from: &buf), latest: try FfiConverterOptionTypeResponse.read(from: &buf)
         )
         
         case 3: return .complete(response: try FfiConverterTypeResponse.read(from: &buf)
@@ -6564,10 +6565,11 @@ public struct FfiConverterTypeMatchOutcome: FfiConverterRustBuffer {
             writeInt(&buf, Int32(1))
         
         
-        case let .progress(received,total):
+        case let .progress(received,total,latest):
             writeInt(&buf, Int32(2))
             FfiConverterUInt32.write(received, into: &buf)
             FfiConverterUInt32.write(total, into: &buf)
+            FfiConverterOptionTypeResponse.write(latest, into: &buf)
             
         
         case let .complete(response):
@@ -8602,7 +8604,10 @@ public enum SessionEvent: Equatable, Hashable {
      */
     case received(packet: Packet, message: WatchMessage, consumedBy: UInt64?
     )
-    case progress(requestId: UInt64, received: UInt32, total: UInt32
+    /**
+     * One more record of a sync; `latest` is just that record.
+     */
+    case progress(requestId: UInt64, received: UInt32, total: UInt32, latest: Response?
     )
     case completed(requestId: UInt64, response: Response
     )
@@ -8638,7 +8643,7 @@ public struct FfiConverterTypeSessionEvent: FfiConverterRustBuffer {
         case 1: return .received(packet: try FfiConverterTypePacket.read(from: &buf), message: try FfiConverterTypeWatchMessage.read(from: &buf), consumedBy: try FfiConverterOptionUInt64.read(from: &buf)
         )
         
-        case 2: return .progress(requestId: try FfiConverterUInt64.read(from: &buf), received: try FfiConverterUInt32.read(from: &buf), total: try FfiConverterUInt32.read(from: &buf)
+        case 2: return .progress(requestId: try FfiConverterUInt64.read(from: &buf), received: try FfiConverterUInt32.read(from: &buf), total: try FfiConverterUInt32.read(from: &buf), latest: try FfiConverterOptionTypeResponse.read(from: &buf)
         )
         
         case 3: return .completed(requestId: try FfiConverterUInt64.read(from: &buf), response: try FfiConverterTypeResponse.read(from: &buf)
@@ -8665,11 +8670,12 @@ public struct FfiConverterTypeSessionEvent: FfiConverterRustBuffer {
             FfiConverterOptionUInt64.write(consumedBy, into: &buf)
             
         
-        case let .progress(requestId,received,total):
+        case let .progress(requestId,received,total,latest):
             writeInt(&buf, Int32(2))
             FfiConverterUInt64.write(requestId, into: &buf)
             FfiConverterUInt32.write(received, into: &buf)
             FfiConverterUInt32.write(total, into: &buf)
+            FfiConverterOptionTypeResponse.write(latest, into: &buf)
             
         
         case let .completed(requestId,response):

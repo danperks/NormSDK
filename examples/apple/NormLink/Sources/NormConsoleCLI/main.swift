@@ -89,7 +89,7 @@ link.onEvent = { event in
     switch event {
     case .received(let packet, let message, let consumedBy):
         print("  watch  \(hex(packet.frame))\(consumedBy.map { " (#\($0))" } ?? "")\n         \(describeMessage(message: message))")
-    case .progress(let id, let received, let total):
+    case .progress(let id, let received, let total, _):
         print("  #\(id) progress \(received)/\(total)")
     case .completed(let id, let response):
         print("  #\(id) → \(describeResponse(response: response))")
