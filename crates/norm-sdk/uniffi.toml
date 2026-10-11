@@ -1,0 +1,12 @@
+[bindings.swift]
+module_name = "NormSDK"
+ffi_module_name = "NormSDKFFI"
+ffi_module_filename = "NormSDKFFI"
+generate_module_map = true
+
+[bindings.kotlin]
+package_name = "io.github.danperks.normsdk"
+cdylib_name = "normsdk"
+
+[bindings.python]
+cdylib_name = "normsdk"

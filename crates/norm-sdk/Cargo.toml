@@ -1,0 +1,15 @@
+[package]
+name = "norm-sdk"
+description = "Protocol core for the Norm Two (P03B) smartwatch: frame codec, annotated command catalog and a sans-IO command session, with UniFFI bindings for Swift, Kotlin and Python."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[lib]
+name = "normsdk"
+crate-type = ["lib", "staticlib", "cdylib"]
+
+[dependencies]
+uniffi.workspace = true

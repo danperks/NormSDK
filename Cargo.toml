@@ -1,0 +1,20 @@
+[workspace]
+resolver = "2"
+members = ["crates/norm-sdk", "crates/uniffi-bindgen", "crates/xtask"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/danperks/NormSDK"
+rust-version = "1.80"
+
+[workspace.dependencies]
+uniffi = "0.32.2"
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = "debuginfo"

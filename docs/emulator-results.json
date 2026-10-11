@@ -1,0 +1,990 @@
+{
+ "commands": {
+  "alarms.counts": {
+   "expected": "reply",
+   "outcome": "reply:ALARM_COUNTS",
+   "received": [
+    "6F 9C 80 02 00 00 00 8F"
+   ],
+   "response": "AlarmCounts { counts: AlarmCounts { reminders: 0, alarms: 0 } }",
+   "sent": [
+    "6F 9C 70 01 00 00 8F"
+   ]
+  },
+  "alarms.free_id": {
+   "expected": "reply",
+   "outcome": "reply:FREE_ALARM_ID",
+   "received": [
+    "6F 9C 80 01 00 01 8F"
+   ],
+   "response": "FreeAlarmId { id: 1 }",
+   "sent": [
+    "6F 9C 70 01 00 04 8F"
+   ]
+  },
+  "alarms.get": {
+   "expected": "ack:1",
+   "outcome": "ack:1",
+   "received": [
+    "6F 01 81 02 00 9C 01 8F"
+   ],
+   "response": "Ack { command: 156, status: 1 }",
+   "sent": [
+    "6F 9C 70 01 00 03 8F"
+   ]
+  },
+  "alarms.set": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 9C 00 8F"
+   ],
+   "response": "Ack { command: 156, status: 0 }",
+   "sent": [
+    "6F 9C 71 15 00 00 01 00 01 04 02 01 1F 04 02 07 1E 06 01 01 07 01 07 08 01 0A 8F"
+   ]
+  },
+  "battery.get": {
+   "expected": "reply",
+   "outcome": "reply:BATTERY",
+   "received": [
+    "6F 08 80 01 00 4D 8F"
+   ],
+   "response": "Battery { status: BatteryStatus { level: 77, charging: false } }",
+   "sent": [
+    "6F 08 70 01 00 01 8F"
+   ]
+  },
+  "battery.get_6e": {
+   "expected": "timeout",
+   "outcome": "timeout",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6E 01 0F 01 8F"
+   ]
+  },
+  "bind.end": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 94 00 8F"
+   ],
+   "response": "Ack { command: 148, status: 0 }",
+   "sent": [
+    "6F 94 71 01 00 01 8F"
+   ]
+  },
+  "bind.start": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 93 00 8F"
+   ],
+   "response": "Ack { command: 147, status: 0 }",
+   "sent": [
+    "6F 93 71 01 00 02 8F"
+   ]
+  },
+  "crown.set": {
+   "expected": "ack:2",
+   "outcome": "ack:2",
+   "received": [
+    "6F 01 81 02 00 2E 02 8F"
+   ],
+   "response": "Ack { command: 46, status: 2 }",
+   "sent": [
+    "6F 2E 71 02 00 01 08 8F"
+   ]
+  },
+  "faces.list": {
+   "expected": "reply",
+   "outcome": "reply:WATCH_FACES",
+   "received": [
+    "6F 1E 80 05 00 01 00 00 80 0E 8F"
+   ],
+   "response": "WatchFaces { faces: [WatchFace { index: 0, id: 0, is_current: true }] }",
+   "sent": [
+    "6F 1E 70 01 00 01 8F"
+   ]
+  },
+  "faces.select": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 1E 00 8F"
+   ],
+   "response": "Ack { command: 30, status: 0 }",
+   "sent": [
+    "6F 1E 71 02 00 02 00 8F"
+   ]
+  },
+  "goals.get": {
+   "expected": "reply",
+   "outcome": "reply:GOALS",
+   "received": [
+    "6F 50 80 0F 00 64 00 01 C8 00 01 05 00 01 08 00 01 1E 00 01 8F"
+   ],
+   "response": "Goals { goals: Goals { steps: 10000, calories: 200, distance_km: 5, sleep_hours: 8, sport_minutes: Some(30) } }",
+   "sent": [
+    "6F 50 70 01 00 00 8F"
+   ]
+  },
+  "goals.get_6e": {
+   "expected": "timeout",
+   "outcome": "timeout",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6E 01 A2 85 00 00 00 00 8F"
+   ]
+  },
+  "goals.set": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 50 00 8F"
+   ],
+   "response": "Ack { command: 80, status: 0 }",
+   "sent": [
+    "6F 50 71 04 00 00 64 00 01 8F"
+   ]
+  },
+  "goals.set_6e": {
+   "expected": "sent",
+   "outcome": "sent",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6E 01 A2 85 10 27 00 00 8F"
+   ]
+  },
+  "hands.machine_timing": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 BA 00 8F"
+   ],
+   "response": "Ack { command: 186, status: 0 }",
+   "sent": [
+    "6F BA 71 07 00 00 00 00 00 0C 1E 00 8F"
+   ]
+  },
+  "hands.move_continuous": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 B8 00 8F"
+   ],
+   "response": "Ack { command: 184, status: 0 }",
+   "sent": [
+    "6F B8 71 03 00 01 01 00 8F"
+   ]
+  },
+  "hands.step": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 B6 00 8F"
+   ],
+   "response": "Ack { command: 182, status: 0 }",
+   "sent": [
+    "6F B6 71 04 00 01 01 02 00 8F"
+   ]
+  },
+  "hands.sync_time": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 B8 00 8F"
+   ],
+   "response": "Ack { command: 184, status: 0 }",
+   "sent": [
+    "6F B8 71 07 00 01 01 04 0C 1E 00 01 8F"
+   ]
+  },
+  "heart_rate.auto.get": {
+   "expected": "reply",
+   "outcome": "reply:AUTO_HEART_RATE",
+   "received": [
+    "6F 5C 80 01 00 0A 8F"
+   ],
+   "response": "AutoHeartRate { value: AutoHeartRate { enabled: true, interval_minutes: 10 } }",
+   "sent": [
+    "6F 5C 70 01 00 00 8F"
+   ]
+  },
+  "heart_rate.auto.set": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 5C 00 8F"
+   ],
+   "response": "Ack { command: 92, status: 0 }",
+   "sent": [
+    "6F 5C 71 01 00 0A 8F"
+   ]
+  },
+  "identity.version": {
+   "expected": "reply",
+   "outcome": "reply:VERSION",
+   "received": [
+    "6F 03 80 15 00 01 41 30 2E 32 52 30 2E 34 54 30 2E 30 48 30 2E 30 42 30 2E 31 8F"
+   ],
+   "response": "Version { text: \"A0.2R0.4T0.0H0.0B0.1\", parsed: Some(FirmwareVersion { raw: \"A0.2R0.4T0.0H0.0B0.1\", segments: [\"A0.2\", \"R0.4\", \"T0.0\", \"H0.0\", \"B0.1\"], apollo_tag: Some(\"B0.1\"), is_patched: false }) }",
+   "sent": [
+    "6F 03 70 01 00 01 8F"
+   ]
+  },
+  "identity.version_6e": {
+   "expected": "timeout",
+   "outcome": "timeout",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6E 01 03 03 8F"
+   ]
+  },
+  "identity.version_no_arg": {
+   "expected": "timeout",
+   "outcome": "timeout",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6F 03 70 00 00 8F"
+   ]
+  },
+  "identity.watch_id": {
+   "expected": "reply",
+   "outcome": "reply:WATCH_ID",
+   "received": [
+    "6F 02 80 14 00 46 43 50 30 33 41 31 38 30 35 30 38 30 31 30 30 30 30 30 30 8F"
+   ],
+   "response": "WatchId { id: \"FCP03A18050801000000\" }",
+   "sent": [
+    "6F 02 70 01 00 00 8F"
+   ]
+  },
+  "inactivity.get_6e": {
+   "expected": "timeout",
+   "outcome": "timeout",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6E 01 43 00 00 00 00 00 00 00 00 00 8F"
+   ]
+  },
+  "inactivity.set_6e": {
+   "expected": "sent",
+   "outcome": "sent",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6E 01 43 01 9F 3C 09 00 12 00 64 00 8F"
+   ]
+  },
+  "music.state": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 D0 00 8F"
+   ],
+   "response": "Ack { command: 208, status: 0 }",
+   "sent": [
+    "6F D0 80 0F 00 01 00 53 6F 6E 67 20 2D 20 41 72 74 69 73 74 8F"
+   ]
+  },
+  "music.stop": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 D0 00 8F"
+   ],
+   "response": "Ack { command: 208, status: 0 }",
+   "sent": [
+    "6F D0 80 02 00 01 FF 8F"
+   ]
+  },
+  "music.volume": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 D0 00 8F"
+   ],
+   "response": "Ack { command: 208, status: 0 }",
+   "sent": [
+    "6F D0 80 03 00 01 02 32 8F"
+   ]
+  },
+  "notifications.counts": {
+   "expected": "ack:2",
+   "outcome": "ack:2",
+   "received": [
+    "6F 01 81 02 00 70 02 8F"
+   ],
+   "response": "Ack { command: 112, status: 2 }",
+   "sent": [
+    "6F 70 71 03 00 01 01 02 8F"
+   ]
+  },
+  "notifications.sms": {
+   "expected": "ack:2",
+   "outcome": "ack:2",
+   "received": [
+    "6F 01 81 02 00 71 02 8F"
+   ],
+   "response": "Ack { command: 113, status: 2 }",
+   "sent": [
+    "6F 71 71 0F 00 04 41 6C 65 78 09 4F 6E 20 6D 79 20 77 61 79 8F"
+   ]
+  },
+  "pages.get": {
+   "expected": "reply",
+   "outcome": "reply:PAGE_ORDER",
+   "received": [
+    "6F 2A 80 07 00 01 05 00 00 00 00 00 8F"
+   ],
+   "response": "PageOrder { pages: [], reported_count: Some(5), raw: [1, 5, 0, 0, 0, 0, 0] }",
+   "sent": [
+    "6F 2A 70 01 00 01 8F"
+   ]
+  },
+  "pages.route_trace": {
+   "expected": "unparsed",
+   "outcome": "unparsed",
+   "received": [
+    "6F 2A 80 00 00 8F"
+   ],
+   "response": "Unparsed { packet: Packet { format: Frame6f, command: 42, action: CheckResponse, payload: [], channel: Primary } }",
+   "sent": [
+    "6F 2A 70 01 00 FD 8F"
+   ]
+  },
+  "pages.set": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 2A 00 8F"
+   ],
+   "response": "Ack { command: 42, status: 0 }",
+   "sent": [
+    "6F 2A 71 0A 00 01 08 02 05 07 06 04 03 08 09 8F"
+   ]
+  },
+  "patched.calendar": {
+   "expected": "sent",
+   "outcome": "sent",
+   "received": [
+    "6F 01 81 02 00 2A 00 8F",
+    "6F 01 81 02 00 2A 00 8F",
+    "6F 01 81 02 00 2A 00 8F",
+    "6F 01 81 02 00 2A 00 8F",
+    "6F 01 81 02 00 2A 00 8F",
+    "6F 01 81 02 00 2A 00 8F"
+   ],
+   "response": null,
+   "sent": [
+    "6F 2A 71 73 00 41 71 00 53 74 61 6E 64 75 70 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 4D 6F 6E 64 61 79 20 31 32 2F 31 30 00 00 00 00 00 00 00 00 00 00 00 00 30 39 3A 33 30 20 2D 20 30 39 3A 34 35 00 00 00 00 00 00 00 00 00 00 00 31 35 20 6D 69 6E 73 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8F",
+    "6F 2A 71 73 00 41 71 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 54 65 61 6D 20 73 74 61 6E 64 75 70 00 00 00 00 00 00 00 00 00 00 00 00 4D 4F 4E 20 39 3A 33 30 20 31 35 6D 69 6E 00 00 00 00 00 00 00 00 00 00 8F",
+    "6F 2A 71 73 00 41 71 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8F",
+    "6F 2A 71 73 00 41 71 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8F",
+    "6F 2A 71 73 00 41 71 04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8F",
+    "6F 2A 71 03 00 42 01 01 8F"
+   ]
+  },
+  "patched.capabilities": {
+   "expected": "reply:CAPABILITIES",
+   "outcome": "reply:CAPABILITIES",
+   "received": [
+    "6F 2A 80 00 00 8F"
+   ],
+   "response": "Capabilities { value: Capabilities { raw: 0, labels: [] } }",
+   "sent": [
+    "6F 2A 70 01 00 43 8F"
+   ]
+  },
+  "patched.custom_text": {
+   "expected": "sent",
+   "outcome": "sent",
+   "received": [
+    "6F 01 81 02 00 2A 00 8F"
+   ],
+   "response": null,
+   "sent": [
+    "6F 2A 71 14 00 40 12 48 65 6C 6C 6F 20 66 72 6F 6D 20 4E 6F 72 6D 53 44 4B 8F"
+   ]
+  },
+  "patched.read_memory": {
+   "expected": "timeout",
+   "outcome": "timeout",
+   "received": [
+    "6F 2A 80 00 00 8F"
+   ],
+   "response": null,
+   "sent": [
+    "6F 2A 70 06 00 40 00 00 00 10 10 8F"
+   ]
+  },
+  "patched.read_resource": {
+   "expected": "timeout",
+   "outcome": "timeout",
+   "received": [
+    "6F 2A 80 00 00 8F"
+   ],
+   "response": null,
+   "sent": [
+    "6F 2A 70 0A 00 41 00 00 01 00 00 00 00 00 10 8F"
+   ]
+  },
+  "profile.set": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 05 00 8F"
+   ],
+   "response": "Ack { command: 5, status: 0 }",
+   "sent": [
+    "6F 05 71 05 00 01 1E AF 46 00 8F"
+   ]
+  },
+  "profile.set_6e": {
+   "expected": "sent",
+   "outcome": "sent",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6E 01 0C 01 1E 00 01 01 AF 58 1B 8F"
+   ]
+  },
+  "raw": {
+   "expected": "reply:PACKET",
+   "outcome": "reply:PACKET",
+   "received": [
+    "6F 08 80 01 00 4D 8F"
+   ],
+   "response": "Packet { packet: Packet { format: Frame6f, command: 8, action: CheckResponse, payload: [77], channel: Primary } }",
+   "sent": [
+    "6F 08 70 01 00 01 8F"
+   ]
+  },
+  "reminders.add_6e": {
+   "expected": "sent",
+   "outcome": "sent",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6E 01 40 02 0A 00 1F 8F"
+   ]
+  },
+  "reminders.delete_6e": {
+   "expected": "sent",
+   "outcome": "sent",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6E 01 09 0A 00 8F"
+   ]
+  },
+  "reminders.delete_all_6e": {
+   "expected": "sent",
+   "outcome": "sent",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6E 01 21 01 8F"
+   ]
+  },
+  "reminders.get_6e": {
+   "expected": "timeout",
+   "outcome": "timeout",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6E 01 20 01 8F"
+   ]
+  },
+  "reminders.get_legacy": {
+   "expected": "ack:2",
+   "outcome": "ack:2",
+   "received": [
+    "6F 01 81 02 00 11 02 8F"
+   ],
+   "response": "Ack { command: 17, status: 2 }",
+   "sent": [
+    "6F 11 70 01 00 00 8F"
+   ]
+  },
+  "reminders.set_legacy": {
+   "expected": "ack:2",
+   "outcome": "ack:2",
+   "received": [
+    "6F 01 81 02 00 11 02 8F"
+   ],
+   "response": "Ack { command: 17, status: 2 }",
+   "sent": [
+    "6F 11 71 06 00 00 01 05 0A 00 1F 8F"
+   ]
+  },
+  "remote.find_phone_ack": {
+   "expected": "sent",
+   "outcome": "sent",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6F 01 81 02 00 D2 00 8F"
+   ]
+  },
+  "remote.find_phone_found": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 1A 00 8F"
+   ],
+   "response": "Ack { command: 26, status: 0 }",
+   "sent": [
+    "6F 1A 71 01 00 10 8F"
+   ]
+  },
+  "remote.gps_distance": {
+   "expected": "sent",
+   "outcome": "sent",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6F E9 80 15 00 00 01 00 01 04 B0 04 00 00 02 04 0A 00 00 00 03 04 00 01 01 01 8F"
+   ]
+  },
+  "remote.gps_location": {
+   "expected": "sent",
+   "outcome": "sent",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6F E9 80 16 00 04 14 40 7A CB 6A D0 67 B3 1E D0 7F EC FF 4C 04 00 00 F4 01 00 00 8F"
+   ]
+  },
+  "remote.gps_status": {
+   "expected": "sent",
+   "outcome": "sent",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6F E9 80 03 00 00 01 00 8F"
+   ]
+  },
+  "settings.auto_sleep.set": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 90 00 8F"
+   ],
+   "response": "Ack { command: 144, status: 0 }",
+   "sent": [
+    "6F 90 71 03 00 01 03 01 8F"
+   ]
+  },
+  "settings.brightness.get": {
+   "expected": "reply",
+   "outcome": "reply:BRIGHTNESS",
+   "received": [
+    "6F 07 80 01 00 50 8F"
+   ],
+   "response": "Brightness { level: 4, percent: 80 }",
+   "sent": [
+    "6F 07 70 01 00 00 8F"
+   ]
+  },
+  "settings.brightness.set": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 07 00 8F"
+   ],
+   "response": "Ack { command: 7, status: 0 }",
+   "sent": [
+    "6F 07 71 01 00 50 8F"
+   ]
+  },
+  "settings.format.get_6e": {
+   "expected": "timeout",
+   "outcome": "timeout",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6E 01 34 FF 8F"
+   ]
+  },
+  "settings.format.set_6e": {
+   "expected": "sent",
+   "outcome": "sent",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6E 01 34 4F 8F"
+   ]
+  },
+  "settings.language": {
+   "expected": "ack:2",
+   "outcome": "ack:2",
+   "received": [
+    "6F 01 81 02 00 09 02 8F"
+   ],
+   "response": "Ack { command: 9, status: 2 }",
+   "sent": [
+    "6F 09 71 01 00 00 8F"
+   ]
+  },
+  "settings.raise_to_wake.set": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 90 00 8F"
+   ],
+   "response": "Ack { command: 144, status: 0 }",
+   "sent": [
+    "6F 90 71 03 00 01 0E 01 8F"
+   ]
+  },
+  "settings.screen_timeout.get": {
+   "expected": "reply",
+   "outcome": "reply:SCREEN_TIMEOUT",
+   "received": [
+    "6F 13 80 01 00 0F 8F"
+   ],
+   "response": "ScreenTimeout { seconds: 15 }",
+   "sent": [
+    "6F 13 70 01 00 00 8F"
+   ]
+  },
+  "settings.screen_timeout.set": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 13 00 8F"
+   ],
+   "response": "Ack { command: 19, status: 0 }",
+   "sent": [
+    "6F 13 71 01 00 0F 8F"
+   ]
+  },
+  "settings.switches.get": {
+   "expected": "reply",
+   "outcome": "reply:SWITCHES",
+   "received": [
+    "6F 90 80 04 00 F0 93 20 00 8F"
+   ],
+   "response": "Switches { states: SwitchStates { raise_to_wake: Some(false), auto_sleep: Some(false) }, raw: [240, 147, 32, 0] }",
+   "sent": [
+    "6F 90 70 01 00 00 8F"
+   ]
+  },
+  "settings.unit.get": {
+   "expected": "reply",
+   "outcome": "reply:UNIT",
+   "received": [
+    "6F 0C 80 01 00 00 8F"
+   ],
+   "response": "Unit { metric: true }",
+   "sent": [
+    "6F 0C 70 01 00 00 8F"
+   ]
+  },
+  "settings.unit.set": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 0C 00 8F"
+   ],
+   "response": "Ack { command: 12, status: 0 }",
+   "sent": [
+    "6F 0C 71 01 00 00 8F"
+   ]
+  },
+  "settings.vibration.get": {
+   "expected": "ack:1",
+   "outcome": "ack:1",
+   "received": [
+    "6F 01 81 02 00 F0 01 8F"
+   ],
+   "response": "Ack { command: 240, status: 1 }",
+   "sent": [
+    "6F F0 70 01 00 00 8F"
+   ]
+  },
+  "settings.vibration.set": {
+   "expected": "ack:1",
+   "outcome": "ack:1",
+   "received": [
+    "6F 01 81 02 00 F0 01 8F"
+   ],
+   "response": "Ack { command: 240, status: 1 }",
+   "sent": [
+    "6F F0 71 03 00 03 01 01 8F"
+   ]
+  },
+  "settings.vibration_strength.get": {
+   "expected": "reply",
+   "outcome": "reply:VIBRATION_STRENGTH",
+   "received": [
+    "6F 10 80 01 00 03 8F"
+   ],
+   "response": "VibrationStrength { value: 3 }",
+   "sent": [
+    "6F 10 70 01 00 00 8F"
+   ]
+  },
+  "sleep.window.get": {
+   "expected": "reply",
+   "outcome": "reply:SLEEP_WINDOW",
+   "received": [
+    "6F 58 80 05 00 16 1E 07 00 7F 8F"
+   ],
+   "response": "SleepWindow { window: SleepWindow { start_hour: 22, start_minute: 30, end_hour: 7, end_minute: 0, weekdays: 127 } }",
+   "sent": [
+    "6F 58 70 01 00 00 8F"
+   ]
+  },
+  "sleep.window.set": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 58 00 8F"
+   ],
+   "response": "Ack { command: 88, status: 0 }",
+   "sent": [
+    "6F 58 71 05 00 16 1E 07 00 7F 8F"
+   ]
+  },
+  "sync.count_6e": {
+   "expected": "timeout",
+   "outcome": "timeout",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6E 01 30 01 8F"
+   ]
+  },
+  "sync.counts": {
+   "expected": "reply",
+   "outcome": "reply:DATA_COUNTS",
+   "received": [
+    "6F 52 80 08 00 01 00 00 00 00 00 00 00 8F"
+   ],
+   "response": "DataCounts { counts: DataCounts { sport: 1, sleep: 0, heart_rate: 0 } }",
+   "sent": [
+    "6F 52 70 01 00 00 8F"
+   ]
+  },
+  "sync.delete_heart_rate": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 5A 00 8F"
+   ],
+   "response": "Ack { command: 90, status: 0 }",
+   "sent": [
+    "6F 5A 71 01 00 00 8F"
+   ]
+  },
+  "sync.delete_sleep": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 55 00 8F"
+   ],
+   "response": "Ack { command: 85, status: 0 }",
+   "sent": [
+    "6F 55 71 01 00 00 8F"
+   ]
+  },
+  "sync.delete_sport": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 53 00 8F"
+   ],
+   "response": "Ack { command: 83, status: 0 }",
+   "sent": [
+    "6F 53 71 01 00 00 8F"
+   ]
+  },
+  "sync.delete_workouts": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 68 00 8F"
+   ],
+   "response": "Ack { command: 104, status: 0 }",
+   "sent": [
+    "6F 68 71 01 00 00 8F"
+   ]
+  },
+  "sync.heart_rate": {
+   "expected": "ack:1",
+   "outcome": "ack:1",
+   "received": [
+    "6F 01 81 02 00 5B 01 8F"
+   ],
+   "response": "Ack { command: 91, status: 1 }",
+   "sent": [
+    "6F 5B 70 01 00 00 8F"
+   ]
+  },
+  "sync.sleep": {
+   "expected": "ack:1",
+   "outcome": "ack:1",
+   "received": [
+    "6F 01 81 02 00 56 01 8F"
+   ],
+   "response": "Ack { command: 86, status: 1 }",
+   "sent": [
+    "6F 56 70 01 00 00 8F"
+   ]
+  },
+  "sync.sleep_6e": {
+   "expected": "timeout",
+   "outcome": "timeout",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6E 01 31 01 8F"
+   ]
+  },
+  "sync.sport": {
+   "expected": "reply",
+   "outcome": "reply:SPORT_RECORDS",
+   "received": [
+    "6F 54 80 1C 00 01 00 39 73 CB 6A 00 00 00 00 E8 03 00 00 00 00 00 00 00 00 00 00 00 00 E8 03 00 00 8F"
+   ],
+   "response": "SportRecords { records: [SportRecord { index: 1, timestamp: 1791718201, steps: 0, calories: 1000, static_calories: 1000, distance_m: 0, duration_min: 0 }] }",
+   "sent": [
+    "6F 54 70 02 00 00 00 8F"
+   ]
+  },
+  "sync.sport_6e": {
+   "expected": "timeout",
+   "outcome": "timeout",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6E 01 06 01 8F"
+   ]
+  },
+  "sync.workout_count": {
+   "expected": "reply",
+   "outcome": "reply:WORKOUT_COUNT",
+   "received": [
+    "6F 66 80 02 00 00 00 8F"
+   ],
+   "response": "WorkoutCount { count: 0 }",
+   "sent": [
+    "6F 66 70 01 00 00 8F"
+   ]
+  },
+  "sync.workout_hr": {
+   "expected": "ack:2",
+   "outcome": "ack:2",
+   "received": [
+    "6F 01 81 02 00 BC 02 8F"
+   ],
+   "response": "Ack { command: 188, status: 2 }",
+   "sent": [
+    "6F BC 70 01 00 01 8F"
+   ]
+  },
+  "sync.workout_hr_count": {
+   "expected": "ack:2",
+   "outcome": "ack:2",
+   "received": [
+    "6F 01 81 02 00 BC 02 8F"
+   ],
+   "response": "Ack { command: 188, status: 2 }",
+   "sent": [
+    "6F BC 70 01 00 00 8F"
+   ]
+  },
+  "sync.workouts": {
+   "expected": "ack:1",
+   "outcome": "ack:1",
+   "received": [
+    "6F 01 81 02 00 67 01 8F"
+   ],
+   "response": "Ack { command: 103, status: 1 }",
+   "sent": [
+    "6F 67 70 02 00 00 00 8F"
+   ]
+  },
+  "system.factory_reset_6e": {
+   "expected": "sent",
+   "outcome": "sent",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6E 01 11 01 8F"
+   ]
+  },
+  "system.upgrade_mode": {
+   "expected": "sent",
+   "outcome": "sent",
+   "received": [
+    "6F 01 81 02 00 12 02 8F"
+   ],
+   "response": null,
+   "sent": [
+    "6F 12 71 01 00 01 8F"
+   ]
+  },
+  "system.upgrade_mode_6e": {
+   "expected": "sent",
+   "outcome": "sent",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6E 01 1C 01 04 00 00 00 00 50 30 33 42 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8F"
+   ]
+  },
+  "time.set": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 04 00 8F"
+   ],
+   "response": "Ack { command: 4, status: 0 }",
+   "sent": [
+    "6F 04 71 0C 00 EA 07 0A 0B 0C 1E 00 00 00 01 01 00 8F"
+   ]
+  },
+  "time.set_6e": {
+   "expected": "sent",
+   "outcome": "sent",
+   "received": [],
+   "response": null,
+   "sent": [
+    "6E 01 15 EA 07 0A 0B 0C 1E 00 8F"
+   ]
+  },
+  "weather.push": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 77 00 8F"
+   ],
+   "response": "Ack { command: 119, status: 0 }",
+   "sent": [
+    "6F 77 71 1A 00 00 0E 09 10 01 00 0D 08 11 02 00 0C 07 0F 03 00 0B 06 0E 01 4C 6F 6E 64 6F 6E 8F"
+   ]
+  },
+  "weather.unit": {
+   "expected": "ack:0",
+   "outcome": "ack:0",
+   "received": [
+    "6F 01 81 02 00 22 00 8F"
+   ],
+   "response": "Ack { command: 34, status: 0 }",
+   "sent": [
+    "6F 22 71 02 00 01 00 8F"
+   ]
+  }
+ },
+ "firmware": "Apollo3_P03B_NORM2_F0.2B01 (stock), NormCrack fwemu"
+}

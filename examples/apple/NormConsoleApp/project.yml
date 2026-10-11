@@ -1,0 +1,50 @@
+name: NormConsole
+options:
+  bundleIdPrefix: io.github.danperks
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+
+packages:
+  NormLink:
+    path: ../NormLink
+
+targets:
+  NormConsole:
+    type: application
+    platform: iOS
+    sources: [Sources]
+    dependencies:
+      - package: NormLink
+        product: NormLink
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.danperks.normconsole
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription: NormConsole connects to your Norm Two watch over Bluetooth.
+        INFOPLIST_KEY_NSLocalNetworkUsageDescription: NormConsole connects to an emulated watch on your network.
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_VERSION: "5.0"
+        CODE_SIGN_STYLE: Automatic
+
+  NormConsoleUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [UITests]
+    dependencies:
+      - target: NormConsole
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_VERSION: "5.0"
+
+schemes:
+  NormConsole:
+    build:
+      targets:
+        NormConsole: all
+    test:
+      targets: [NormConsoleUITests]

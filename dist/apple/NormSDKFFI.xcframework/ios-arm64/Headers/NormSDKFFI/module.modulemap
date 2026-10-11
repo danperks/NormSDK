@@ -1,0 +1,4 @@
+module NormSDKFFI {
+    header "NormSDKFFI.h"
+    export *
+}

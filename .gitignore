@@ -1,0 +1,17 @@
+/target/
+.build/
+.swiftpm/
+*.xcuserstate
+xcuserdata/
+DerivedData/
+__pycache__/
+*.egg-info/
+python/build/
+
+android/.gradle/
+android/.kotlin/
+android/build/
+android/*/build/
+android/local.properties
+.idea/
+.DS_Store
